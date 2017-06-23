@@ -64,12 +64,12 @@
     package_vars_wrong_format: "[{% for k,v in package_vars.items() | list if v | type_debug != 'dict' %}'{{ k }}',{% endfor %}]"
   tags: [sshd, memcached, php]
 
-- name: Validate Ubuntu version
+- name: Validate Debian version
   debug:
     msg: |
-      Trellis is built for Ubuntu 18.04 Bionic as of https://github.com/roots/trellis/pull/992
+      Trellis is built for Debian 9.6 (Stretch)
 
-      Your Ubuntu version is {{ ansible_distribution_version }} {{ ansible_distribution_release }}
+      Your Debian version is {{ ansible_distribution_version }} {{ ansible_distribution_release }}
 
       We recommend you re-create your server to get the best experience.
 
@@ -77,8 +77,8 @@
 
       Development via Vagrant: `vagrant destroy && vagrant up`
 
-      Staging/Production: Create a new server with Ubuntu 18.04 and provision
-  when: ansible_distribution_release != 'bionic'
+      Staging/Production: Create a new server with Debian 9.6 and provision
+  when: ansible_distribution_release != 'stretch'
 
 - name: Check whether passlib is needed
   fail:
@@ -109,6 +109,22 @@
     msg: "{{ lookup('template', 'validate_ssh_msg.j2') }}"
   when: openssh_6_8_plus and validate_ssh | default(true)
   tags: [sshd]
+
+- name: Update sources.list file
+  copy:
+    src: sources.list
+    dest: /etc/apt/sources.list
+    owner: root
+    group: root
+    mode: 0644
+
+- name: Update packages list
+  apt:
+    update_cache: yes
+
+- name: Upgrade packages
+  apt:
+    upgrade: dist
 
 - name: Checking essentials
   apt:

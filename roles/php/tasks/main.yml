@@ -1,7 +1,22 @@
 ---
-- name: Add PHP 7.3 PPA
+- name: Install required packages to install PHP 7.3
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - apt-transport-https
+    - lsb-release
+    - ca-certificates
+
+- name: Add PHP 7.3 APT key
+  apt_key:
+    url: "https://packages.sury.org/php/apt.gpg"
+    keyring: /etc/apt/trusted.gpg.d/php.gpg
+
+- name: Add PHP 7.3 APT repository
   apt_repository:
-    repo: "ppa:ondrej/php"
+    repo: "deb https://packages.sury.org/php/ {{ ansible_distribution_release }} main"
+    filename: php
     update_cache: yes
 
 - name: Install PHP 7.3

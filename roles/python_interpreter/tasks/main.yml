@@ -1,11 +1,11 @@
 - block:
-  - name: Get Ubuntu release
+  - name: Get Debian release
     raw: lsb_release -cs
-    register: ubuntu_release
+    register: debian_release
     changed_when: false
-  - name: Set ansible_python_interpreter for Ubuntu 18.04 Bionic
+  - name: Set ansible_python_interpreter for Debian 9.6 Stretch
     set_fact:
       ansible_python_interpreter: python3
-    when: ubuntu_release.stdout | trim == 'bionic'
+    when: debian_release.stdout | trim == 'stretch'
   when: ansible_python_interpreter is not defined
   tags: always

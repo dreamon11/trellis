@@ -1,5 +1,5 @@
 ---
-nginx_ppa: "ppa:nginx/development"
+nginx_repo: "deb http://nginx.org/packages/mainline/debian/ {{ ansible_distribution_release }} nginx"
 nginx_package: nginx
 nginx_conf: nginx.conf.j2
 nginx_path: /etc/nginx

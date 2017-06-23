@@ -5,9 +5,9 @@
       keyserver: "{{ mariadb_keyserver }}"
       id: "{{ mariadb_keyserver_id }}"
 
-  - name: Add MariaDB PPA
+  - name: Add MariaDB APT repository
     apt_repository:
-      repo: "{{ mariadb_ppa }}"
+      repo: "{{ mariadb_repo }}"
       update_cache: yes
 
 - name: Install MySQL client

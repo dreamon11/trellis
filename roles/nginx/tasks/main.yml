@@ -1,7 +1,11 @@
 ---
-- name: Add Nginx PPA
+- name: Add Nginx APT key
+  apt_key:
+    url: "https://nginx.org/keys/nginx_signing.key"
+
+- name: Add Nginx APT repository
   apt_repository:
-    repo: "{{ nginx_ppa }}"
+    repo: "{{ nginx_repo }}"
     update_cache: yes
 
 - name: Install Nginx
@@ -37,6 +41,12 @@
     dest: "{{ nginx_path }}/nginx.conf"
   notify: reload nginx
   tags: nginx-includes
+
+- name: Create sites-available and sites-enabled directories
+  file:
+    path: "{{ nginx_path }}/{{ item }}"
+    state: directory
+  with_items: ["sites-available", "sites-enabled"]
 
 - name: Disable default server
   file:

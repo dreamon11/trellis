@@ -15,6 +15,11 @@
   become: yes
   roles:
     - { role: python_interpreter, tags: [always] }
+  tasks:
+    - name: Install sudo
+      raw: which sudo || apt-get update && apt-get install -qq -y sudo
+      register: sudo_check
+      changed_when: sudo_check.stdout is not search('/usr/bin/sudo')
 
 - name: WordPress Server - Install LEMP Stack with PHP 7.3 and MariaDB MySQL
   hosts: web:&{{ env }}
