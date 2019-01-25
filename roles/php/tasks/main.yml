@@ -2,7 +2,6 @@
 - name: Install required packages to install PHP 7.3
   apt:
     name: "{{ item }}"
-    state: present
   with_items:
     - apt-transport-https
     - lsb-release
