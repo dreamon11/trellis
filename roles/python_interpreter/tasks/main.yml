@@ -3,9 +3,9 @@
     raw: lsb_release -cs
     register: debian_release
     changed_when: false
-  - name: Set ansible_python_interpreter for Debian 9.8 Stretch
+  - name: Set ansible_python_interpreter for Debian 10.0 Buster
     set_fact:
       ansible_python_interpreter: python3
-    when: debian_release.stdout | trim == 'stretch'
+    when: debian_release.stdout | trim == 'buster'
   when: ansible_python_interpreter is not defined
   tags: always

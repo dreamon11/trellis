@@ -67,7 +67,7 @@
 - name: Validate Debian version
   debug:
     msg: |
-      Trellis is built for Debian 9.8 (Stretch)
+      Trellis is built for Debian 10.0 (Buster)
 
       Your Debian version is {{ ansible_distribution_version }} {{ ansible_distribution_release }}
 
@@ -77,8 +77,8 @@
 
       Development via Vagrant: `vagrant destroy && vagrant up`
 
-      Staging/Production: Create a new server with Debian 9.8 and provision
-  when: ansible_distribution_release != 'stretch'
+      Staging/Production: Create a new server with Debian 10.0 and provision
+  when: ansible_distribution_release != 'buster'
 
 - name: Check whether passlib is needed
   fail:
