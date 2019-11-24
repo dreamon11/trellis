@@ -13,7 +13,7 @@ Ansible playbooks for setting up a LEMP stack for WordPress.
 
 Trellis will configure a server with the following and more:
 
-* Debian 10.0 Buster
+* Debian 10.1 Buster
 * Nginx (with optional FastCGI micro-caching)
 * PHP 7.3
 * MariaDB (a drop-in MySQL replacement)
@@ -81,7 +81,7 @@ $ composer create-project roots/bedrock site
 
 For remote servers, installing Ansible locally is an additional requirement. See the [docs](https://roots.io/trellis/docs/remote-server-setup/#requirements) for more information.
 
-A base Debian 10.0 (Buster) server is required for setting up remote servers. OS X users must have [passlib](http://pythonhosted.org/passlib/install.html#installation-instructions) installed.
+A base Debian 10.1 (Buster) server is required for setting up remote servers. OS X users must have [passlib](http://pythonhosted.org/passlib/install.html#installation-instructions) installed.
 
 1. Configure your WordPress sites in `group_vars/<environment>/wordpress_sites.yml` and in `group_vars/<environment>/vault.yml` (see the [Vault docs](https://roots.io/trellis/docs/vault/) for how to encrypt files containing passwords)
 2. Add your server IP/hostnames to `hosts/<environment>`

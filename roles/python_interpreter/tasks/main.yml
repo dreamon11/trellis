@@ -3,7 +3,7 @@
     raw: lsb_release -cs
     register: debian_release
     changed_when: false
-  - name: Set ansible_python_interpreter for Debian 10.0 Buster
+  - name: Set ansible_python_interpreter for Debian 10.1 Buster
     set_fact:
       ansible_python_interpreter: python3
     when: debian_release.stdout | trim == 'buster'

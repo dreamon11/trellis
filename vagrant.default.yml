@@ -3,7 +3,7 @@ vagrant_ip: '192.168.50.5'
 vagrant_cpus: 1
 vagrant_memory: 1024 # in MB
 vagrant_box: 'debian/buster64'
-vagrant_box_version: '>= 9.99.2'
+vagrant_box_version: '>= 10.1.0'
 vagrant_ansible_version: '2.7.12'
 vagrant_skip_galaxy: false
 vagrant_mount_type: 'nfs'
