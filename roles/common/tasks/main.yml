@@ -118,7 +118,7 @@
     group: root
     mode: 0644
 
-- name: Update packages list
+- name: Update apt packages
   apt:
     update_cache: yes
 
