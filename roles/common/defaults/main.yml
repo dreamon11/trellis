@@ -42,8 +42,7 @@ apt_packages_python:
 python_major_version: "{{ ansible_python_version[0] }}"
 apt_packages_default: "{{ _apt_packages_default | combine(apt_packages_python[python_major_version]) }}"
 
-apt_packages_custom:
-  dirmngr: "{{ apt_package_state }}"
+apt_packages_custom: {}
 apt_packages: "{{ apt_packages_default | combine(apt_packages_custom) }}"
 
 openssh_6_8_plus: "{{ (lookup('pipe', 'ssh -V 2>&1')) | regex_replace('(.*OpenSSH_([\\d\\.]*).*)', '\\2') is version_compare('6.8', '>=') }}"
