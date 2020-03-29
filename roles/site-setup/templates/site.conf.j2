@@ -6,7 +6,7 @@ server {
   {% block server_id -%}
   listen {{ ssl_enabled | ternary('[::]:443 ssl http2', '[::]:80') }};
   listen {{ ssl_enabled | ternary('443 ssl http2', '80') }};
-  server_name {{ site_hosts_canonical | union(multisite_subdomains_wildcards) | join(' ') }};
+  server_name {{ site_hosts_canonical | join(' ') }};
   {% endblock %}
 
   {% block logs -%}
@@ -46,24 +46,6 @@ server {
     set $skip_cache 1;
   }
 
-  {% endif -%}
-  {% endblock -%}
-
-  {% block multisite_rewrites -%}
-  {% if item.value.multisite.enabled | default(false) -%}
-  # Multisite rewrites
-  {% if item.value.multisite.subdomains | default(false) -%}
-  rewrite ^/(wp-.*.php)$ /wp/$1 last;
-  rewrite ^/(wp-(content|admin|includes).*) /wp/$1 last;
-
-  {% else -%}
-  if (!-e $request_filename) {
-    rewrite /wp-admin$ $scheme://$host$uri/ permanent;
-    rewrite ^(/[^/]+)?(/wp-.*) /wp$2 last;
-    rewrite ^(/[^/]+)?(/.*\.php) /wp$2 last;
-  }
-
-  {% endif -%}
   {% endif -%}
   {% endblock -%}
 
@@ -114,13 +96,6 @@ server {
   include includes.d/{{ item.key }}/*.conf;
 
   {% endblock -%}
-
-  {% block location_uploads_php -%}
-  # Prevent PHP scripts from being executed inside the uploads folder.
-  location ~* /app/uploads/.*\.php$ {
-    deny all;
-  }
-  {% endblock %}
 
   {% block blade_twig_templates -%}
   # Prevent Blade and Twig templates from being accessed directly.
@@ -208,13 +183,6 @@ server {
   {% if item.value.nginx_embed_security | default(nginx_embed_security | default(true)) -%}
   add_header Content-Security-Policy "frame-ancestors 'self'" always;
 
-  # Conditional X-Frame-Options until https://core.trac.wordpress.org/ticket/40020 is resolved
-  set $x_frame_options SAMEORIGIN;
-  if ($arg_customize_changeset_uuid) {
-    set $x_frame_options "";
-  }
-  add_header X-Frame-Options $x_frame_options always;
-
   {% endif -%}
   {% endblock -%}
 
@@ -236,7 +204,7 @@ server {
     {% block cache_config -%}
     {% if item.value.cache is defined and item.value.cache.enabled | default(false) -%}
     # Fastcgi cache settings
-    fastcgi_cache wordpress;
+    fastcgi_cache site;
     fastcgi_cache_valid {{ item.value.cache.duration | default(nginx_cache_duration) }};
     fastcgi_cache_bypass $skip_cache;
     fastcgi_no_cache $skip_cache;
@@ -249,7 +217,7 @@ server {
     include fastcgi_params;
     fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
     fastcgi_param DOCUMENT_ROOT $realpath_root;
-    fastcgi_pass unix:/var/run/php-fpm-wordpress.sock;
+    fastcgi_pass unix:/var/run/php-fpm-site.sock;
     {%- endblock %}
 
   }
@@ -263,7 +231,7 @@ server {
 server {
   listen [::]:80;
   listen 80;
-  server_name {{ site_hosts_canonical | union(multisite_subdomains_wildcards) | join(' ') }};
+  server_name {{ site_hosts_canonical | join(' ') }};
 
   {{ self.acme_challenge() -}}
 

@@ -3,11 +3,10 @@
 [![Build Status](https://img.shields.io/circleci/build/gh/roots/trellis?style=flat-square)](https://circleci.com/gh/roots/trellis)
 [![Follow Roots](https://img.shields.io/twitter/follow/rootswp.svg?style=flat-square&color=1da1f2)](https://twitter.com/rootswp)
 
-Ansible playbooks for setting up a LEMP stack for WordPress.
+Ansible playbooks for setting up a LEMP stack.
 
 - Local development environment with Vagrant
 - High-performance production servers
-- Zero-downtime deploys for your [Bedrock](https://roots.io/bedrock/)-based WordPress sites
 - [trellis-cli](https://github.com/roots/trellis-cli) for easier management
 
 ## What's included
@@ -22,10 +21,8 @@ Trellis will configure a server with the following and more:
 * Let's Encrypt for free SSL certificates
 * HTTP/2 support (requires SSL)
 * Composer
-* WP-CLI
 * sSMTP (mail delivery)
 * MailHog
-* Memcached
 * Fail2ban and ferm
 
 ## Documentation
@@ -58,10 +55,7 @@ The recommended directory structure for a Trellis project looks like:
 ```shell
 example.com/      # → Root folder for the project
 ├── trellis/      # → Your clone of this repository
-└── site/         # → A Bedrock-based WordPress site
-    └── web/
-        ├── app/  # → WordPress content directory (themes, plugins, etc.)
-        └── wp/   # → WordPress core (don't touch!)
+└── site/
 ```
 
 See a complete working example in the [roots-example-project.com repo](https://github.com/roots/roots-example-project.com).
@@ -76,16 +70,12 @@ $ mkdir example.com && cd example.com
 ```plain
 $ git clone --depth=1 git@github.com:roots/trellis.git && rm -rf trellis/.git
 ```
-3. Install Bedrock into the `site` directory:
-```plain
-$ composer create-project roots/bedrock site
-```
 
 ## Local development setup
 
 ### Using trellis-cli
 
-1. Review the automatically created site in `group_vars/development/wordpress_sites.yml`
+1. Review the automatically created site in `group_vars/development/sites.yml`
 2. Customize settings if necessary
 
 Start the Vagrant virtual machine:
@@ -95,7 +85,7 @@ $ trellis up
 
 ### Manual
 
-1. Configure your WordPress sites in `group_vars/development/wordpress_sites.yml` and in `group_vars/development/vault.yml`
+1. Configure your sites in `group_vars/development/sites.yml` and in `group_vars/development/vault.yml`
 2. Ensure you're in the trellis directory: `cd trellis`
 3. Run `vagrant up`
 
@@ -105,7 +95,7 @@ $ trellis up
 
 A base Debian 10 (Buster) server is required for setting up remote servers.
 
-1. Configure your WordPress sites in `group_vars/<environment>/wordpress_sites.yml` and in `group_vars/<environment>/vault.yml` (see the [Vault docs](https://roots.io/trellis/docs/vault/) for how to encrypt files containing passwords)
+1. Configure your sites in `group_vars/<environment>/sites.yml` and in `group_vars/<environment>/vault.yml` (see the [Vault docs](https://roots.io/trellis/docs/vault/) for how to encrypt files containing passwords)
 2. Add your server IP/hostnames to `hosts/<environment>`
 3. Specify public SSH keys for `users` in `group_vars/all/users.yml` (see the [SSH Keys docs](https://roots.io/trellis/docs/ssh-keys/))
 
@@ -139,7 +129,7 @@ $ ansible-playbook server.yml -e env=<environment>
 
 ## Deploying to remote servers
 
-1. Add the `repo` (Git URL) of your Bedrock WordPress project in the corresponding `group_vars/<environment>/wordpress_sites.yml` file
+1. Add the `repo` (Git URL) of your project in the corresponding `group_vars/<environment>/sites.yml` file
 2. Set the `branch` you want to deploy (defaults to `master`)
 
 ### Using trellis-cli

@@ -50,18 +50,14 @@ Vagrant.configure('2') do |config|
   main_hostname, *hostnames = trellis_config.site_hosts_canonical
   config.vm.hostname = main_hostname
 
-  if Vagrant.has_plugin?('vagrant-hostmanager') && !trellis_config.multisite_subdomains?
+  if Vagrant.has_plugin?('vagrant-hostmanager')
     redirects = trellis_config.site_hosts_redirects
 
     config.hostmanager.enabled = true
     config.hostmanager.manage_host = true
     config.hostmanager.aliases = hostnames + redirects
-  elsif Vagrant.has_plugin?('landrush') && trellis_config.multisite_subdomains?
-    config.landrush.enabled = true
-    config.landrush.tld = trellis_config.site_hosts_canonical.reject { |host| host.end_with?(".#{main_hostname}") }
-    hostnames.each { |host| config.landrush.host host, vconfig.fetch('vagrant_ip') }
   else
-    fail_with_message "vagrant-hostmanager missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostmanager\n\nOr install landrush for multisite subdomains:\nvagrant plugin install landrush"
+    fail_with_message "vagrant-hostmanager missing, please install the plugin with this command:\nvagrant plugin install vagrant-hostmanager"
   end
 
   bin_path = File.join(ANSIBLE_PATH_ON_VM, 'bin')
@@ -79,7 +75,7 @@ Vagrant.configure('2') do |config|
 
   if vagrant_mount_type != 'nfs' || Vagrant::Util::Platform.wsl? || (Vagrant::Util::Platform.windows? && !Vagrant.has_plugin?('vagrant-winnfsd'))
     vagrant_mount_type = nil if vagrant_mount_type == 'nfs'
-    trellis_config.wordpress_sites.each_pair do |name, site|
+    trellis_config.sites.each_pair do |name, site|
       config.vm.synced_folder local_site_path(site), remote_site_path(name, site), owner: 'vagrant', group: 'www-data', mount_options: mount_options(vagrant_mount_type, dmode: 776, fmode: 775), type: vagrant_mount_type, **extra_options
     end
 
@@ -88,7 +84,7 @@ Vagrant.configure('2') do |config|
   elsif !Vagrant.has_plugin?('vagrant-bindfs')
     fail_with_message "vagrant-bindfs missing, please install the plugin with this command:\nvagrant plugin install vagrant-bindfs"
   else
-    trellis_config.wordpress_sites.each_pair do |name, site|
+    trellis_config.sites.each_pair do |name, site|
       config.vm.synced_folder local_site_path(site), nfs_path(name), type: 'nfs'
       config.bindfs.bind_folder nfs_path(name), remote_site_path(name, site), u: 'vagrant', g: 'www-data', o: 'nonempty'
     end

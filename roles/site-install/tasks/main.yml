@@ -1,0 +1,43 @@
+---
+- import_tasks: directories.yml
+  tags: site-install-directories
+
+- name: Create .env file
+  template:
+    src: "env.j2"
+    dest: "/tmp/{{ item.key }}.env"
+    owner: "{{ web_user }}"
+    group: "{{ web_group }}"
+  with_dict: "{{ sites }}"
+
+- name: Copy .env file into web root
+  synchronize:
+    src: "/tmp/{{ item.key }}.env"
+    dest: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/.env"
+    checksum: true
+  with_dict: "{{ sites }}"
+  delegate_to: "{{ inventory_hostname }}"
+
+- name: Add known_hosts
+  known_hosts:
+    name: "{{ item.name }}"
+    key: "{{ item.key | default(omit) }}"
+    path: "{{ item.path | default(omit) }}"
+    state: "{{ item.state | default('present') }}"
+  become: no
+  with_items: "{{ known_hosts | default([]) }}"
+
+- include_tasks: tasks/composer-authentications.yml
+  vars:
+    site: "{{ item.key }}"
+    working_dir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  no_log: true
+  with_dict: "{{ sites }}"
+
+- name: Install Dependencies with Composer
+  composer:
+    no_dev: no
+    optimize_autoloader: no
+    working_dir: "{{ www_root }}/{{ item.key }}/{{ item.value.current_path | default('current') }}/"
+  become: no
+  with_dict: "{{ sites }}"
