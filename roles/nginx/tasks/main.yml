@@ -51,12 +51,6 @@
   notify: reload nginx
   tags: nginx-includes
 
-- name: Create sites-available and sites-enabled directories
-  file:
-    path: "{{ nginx_path }}/{{ item }}"
-    state: directory
-  with_items: ["sites-available", "sites-enabled"]
-
 - name: Disable default server
   file:
     path: "{{ nginx_path }}/sites-enabled/default"
