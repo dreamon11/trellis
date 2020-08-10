@@ -1,4 +1,6 @@
 ---
+nginx_keyserver: "https://nginx.org/keys/nginx_signing.key"
+nginx_keyserver_id: "ABF5BD827BD9BF62"
 nginx_repo: "deb http://nginx.org/packages/mainline/debian/ {{ ansible_distribution_release }} nginx"
 nginx_package: nginx
 nginx_conf: nginx.conf.j2
