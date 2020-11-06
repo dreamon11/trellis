@@ -1,7 +1,8 @@
 ---
 - name: Add Nginx APT key
   apt_key:
-    url: "https://nginx.org/keys/nginx_signing.key"
+    keyserver: "{{ nginx_keyserver }}"
+    id: "{{ nginx_keyserver_id }}"
 
 - name: Add Nginx APT repository
   apt_repository:
@@ -14,6 +15,14 @@
     state: "{{ nginx_package_state | default(apt_package_state) }}"
     cache_valid_time: "{{ apt_cache_valid_time }}"
 
+- name: Ensure site directories exist
+  file:
+    path: "{{ nginx_path }}/{{ item }}"
+    state: directory
+  with_items:
+    - sites-available
+    - sites-enabled
+
 - name: Create SSL directory
   file:
     mode: 0700
@@ -25,7 +34,7 @@
   args:
     chdir: "{{ nginx_path }}/ssl"
     creates: "{{ nginx_path }}/ssl/dhparams.pem"
-  when: sites_use_ssl
+  when: sites_use_ssl | bool
   notify: reload nginx
   tags: [diffie-hellman, letsencrypt, site, site-setup, nginx-includes, nginx-sites]
 
@@ -41,12 +50,6 @@
     dest: "{{ nginx_path }}/nginx.conf"
   notify: reload nginx
   tags: nginx-includes
-
-- name: Create sites-available and sites-enabled directories
-  file:
-    path: "{{ nginx_path }}/{{ item }}"
-    state: directory
-  with_items: ["sites-available", "sites-enabled"]
 
 - name: Disable default server
   file:

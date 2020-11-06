@@ -1,10 +1,32 @@
-### Head
+### HEAD
+* Remove prestissimo for Composer 2.0 support ([#1247](https://github.com/roots/trellis/pull/1247))
+* Allow WP cron intervals to be configurable ([#1222](https://github.com/roots/trellis/pull/1222))
+* Remove default Vagrant SMB credentials ([#1215](https://github.com/roots/trellis/pull/1215))
+* Fix usage of `ANSIBLE_CONFIG` env var ([#1217](https://github.com/roots/trellis/pull/1217))
+* Update MariaDB package to 10.5 ([#1212](https://github.com/roots/trellis/pull/1212))
+* Switch to official Nginx Ubuntu package ([#1208](https://github.com/roots/trellis/pull/1208))
+
+### 1.5.0: August 5th, 2020
+* Improve Nginx reloading for failed Let's Encrypt certificates ([#1207](https://github.com/roots/trellis/pull/1207))
+* Add support for Lets Encrypt contact emails ([#1206](https://github.com/roots/trellis/pull/1206))
+* Support branch variable for deploys ([#1204](https://github.com/roots/trellis/pull/1204))
+* Removes ID from Lets Encrypt bundled certificate and make filename stable ([#834](https://github.com/roots/trellis/pull/834))
+* Make Fail2ban settings extensible ([#1177](https://github.com/roots/trellis/pull/1177))
+* Improve ip_whitelist in development ([#1183](https://github.com/roots/trellis/pull/1183))
+* Support Ansible 2.9 ([#1169](https://github.com/roots/trellis/pull/1169))
+* [BREAKING] Remove `nginx_includes_deprecated` feature ([#1173](https://github.com/roots/trellis/pull/1173))
+* Bump Ansible version_tested_max to 2.8.10 ([#1167](https://github.com/roots/trellis/pull/1167))
+* Bump Ansible requirement to 2.8.0 ([#1147](https://github.com/roots/trellis/pull/1147))
+* Update CircleCI Config ([#1184](https://github.com/roots/trellis/pull/1184))
+
+### 1.4.0: April 2nd, 2020
+* Update PHP to 7.4 ([#1164](https://github.com/roots/trellis/pull/1164))
 * Update `wp_cli_version` to 2.4.0 ([#1131](https://github.com/roots/trellis/pull/1131))
 * Fix `subjectAltName` for self-signed certificates ([#1128](https://github.com/roots/trellis/pull/1128))
 * `composer install` without `--no-scripts` during deploy ([#1133](https://github.com/roots/trellis/pull/1133))
 * Allow `composer install` with `--classmap-authoritative` during deploy ([#1132](https://github.com/roots/trellis/pull/1132))
 * Use modern SSL config for Nginx ([#1127](https://github.com/roots/trellis/pull/1127))
-* Fix `DEPLOY_UNFINISHED` not being copied over to `release` folder (#[1145])(https://github.com/roots/trellis/pull/1145)
+* Fix `DEPLOY_UNFINISHED` not being copied over to `release` folder ([#1145](https://github.com/roots/trellis/pull/1145))
 * Deploy: Remove untracked files from project folder ([#1146](https://github.com/roots/trellis/pull/1146))
 * Nginx: Block `composer/installed.json` ([#1150](https://github.com/roots/trellis/pull/1150))
 * Run `git clean` after checking `git clone` is successful ([#1151](https://github.com/roots/trellis/pull/1151))
