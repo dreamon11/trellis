@@ -65,7 +65,6 @@ Trellis will configure a server with the following and more:
 - Let's Encrypt for free SSL certificates
 - HTTP/2 support (requires SSL)
 - Composer
-- WP-CLI
 - sSMTP (mail delivery)
 - MailHog
 - Memcached
