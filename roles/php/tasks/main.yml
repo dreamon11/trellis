@@ -1,21 +1,7 @@
 ---
-- name: Install required packages to install PHP 7.4
-  apt:
-    name: "{{ item }}"
-  with_items:
-    - apt-transport-https
-    - lsb-release
-    - ca-certificates
-
-- name: Add PHP 7.4 APT key
-  apt_key:
-    url: "https://packages.sury.org/php/apt.gpg"
-    keyring: /etc/apt/trusted.gpg.d/php.gpg
-
-- name: Add PHP 7.4 APT repository
+- name: Add PHP 7.4 PPA
   apt_repository:
-    repo: "deb https://packages.sury.org/php/ {{ ansible_distribution_release }} main"
-    filename: php
+    repo: "ppa:ondrej/php"
     update_cache: yes
 
 - name: Install PHP 7.4

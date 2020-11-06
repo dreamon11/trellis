@@ -4,9 +4,9 @@
     keyserver: "{{ nginx_keyserver }}"
     id: "{{ nginx_keyserver_id }}"
 
-- name: Add Nginx APT repository
+- name: Add Nginx PPA
   apt_repository:
-    repo: "{{ nginx_repo }}"
+    repo: "{{ nginx_ppa }}"
     update_cache: yes
 
 - name: Install Nginx
