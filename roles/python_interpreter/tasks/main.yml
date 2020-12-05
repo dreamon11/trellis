@@ -6,6 +6,6 @@
   - name: Set ansible_python_interpreter for Debian >= 10
     set_fact:
       ansible_python_interpreter: python3
-    when: debian_version.stdout | trim is version('10', '>=')
+    when: debian_version.stdout | trim is version(10, '>=')
   when: ansible_python_interpreter is not defined
   tags: always
